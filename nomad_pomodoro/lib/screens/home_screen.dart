@@ -18,6 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
     //1초 1Tick마다 실행할
     setState(() {
       totalSeconds = totalSeconds - 1;
+      if (totalSeconds == 0) {
+        isRunning = false;
+        timer.cancel();
+      }
     });
   }
 
@@ -52,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                "$totalSeconds",
+                (totalSeconds != 0) ? "$totalSeconds" : "fin",
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
