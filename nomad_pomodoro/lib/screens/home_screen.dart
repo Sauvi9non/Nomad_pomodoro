@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -8,6 +10,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int totalSeconds = 1500;
+  late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
+
+  void onTick(Timer timer) {
+    //1초 1Tick마다 실행할
+    setState(() {
+      totalSeconds = totalSeconds - 1;
+    });
+  }
+
+  void onStartPressed() {
+    //이 메서드는 Timer를 만든다. Timer는 Dart의 표준 라이브러리에 포함
+    //타이머가 생성
+    //타이머 초기화
+    timer = Timer.periodic(Duration(seconds: 1), onTick);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                "25:00",
+                "$totalSeconds",
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
@@ -35,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 3,
             child: Center(
               child: IconButton(
-                onPressed: () {},
+                onPressed: onStartPressed,
                 icon: Icon(Icons.play_circle_outline),
                 iconSize: 120,
                 color: Theme.of(context).cardColor,
