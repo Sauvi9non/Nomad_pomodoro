@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int totalSeconds = 1500;
   late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
+  bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
 
   void onTick(Timer timer) {
     //1초 1Tick마다 실행할
@@ -25,6 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
     //타이머가 생성
     //타이머 초기화
     timer = Timer.periodic(Duration(seconds: 1), onTick);
+    setState(() {
+      isRunning = true; //isPause 상태 반대로
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
   }
 
   @override
@@ -54,8 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 3,
             child: Center(
               child: IconButton(
-                onPressed: onStartPressed,
-                icon: Icon(Icons.play_circle_outline),
+                onPressed: isRunning ? onPausePressed : onStartPressed,
+                icon: isRunning
+                    ? Icon(Icons.pause_circle_outline)
+                    : Icon(Icons.play_circle_outline),
                 iconSize: 120,
                 color: Theme.of(context).cardColor,
               ),
