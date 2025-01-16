@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
   bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
   bool showRestart = false;
-  int cycles = 0;
+  int cycles = 3;
   int rounds = 0;
 
   void onTick(Timer timer) {
@@ -27,16 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
         isRunning = false;
         timer.cancel();
         cycles = cycles + 1;
-
-        //라운드 1회 추가
-        if ((cycles / 4) == 0) {
-          rounds = rounds + 1;
-          cycles = 0; //사이클은 다시 0으로
-        }
-
         totalSeconds = timeSelect[0]; // 선택한 타이머 시간으로 다시
       } else {
         totalSeconds = totalSeconds - 1;
+      }
+
+      //라운드 1회 추가
+      if ((4 / cycles) == 0) {
+        rounds = rounds + 1;
+        cycles = 0; //사이클은 다시 0으로
       }
     });
   }
@@ -186,7 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              "$cycles", //pomodoro를 끝낸 횟수
+                              (cycles * 0.25)
+                                  .truncate()
+                                  .toString(), //pomodoro를 끝낸 횟수
                               style: TextStyle(
                                 fontSize: 58,
                                 fontWeight: FontWeight.w600,
