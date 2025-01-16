@@ -10,17 +10,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 1500;
+  static const List<int> timeSelect = [5, 1500];
+  int totalSeconds = timeSelect[0];
   late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
   bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
+  int totalPomodoros = 0;
 
   void onTick(Timer timer) {
     //1초 1Tick마다 실행할
     setState(() {
-      totalSeconds = totalSeconds - 1;
       if (totalSeconds == 0) {
         isRunning = false;
         timer.cancel();
+        totalPomodoros = totalPomodoros + 1;
+        totalSeconds = timeSelect[0];
+      } else {
+        totalSeconds = totalSeconds - 1;
       }
     });
   }
@@ -107,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "0", //pomodoro를 끝낸 횟수
+                          "$totalPomodoros", //pomodoro를 끝낸 횟수
                           style: TextStyle(
                             fontSize: 58,
                             fontWeight: FontWeight.w600,
