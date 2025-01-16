@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nomad_pomodoro/screens/home_screen.dart';
 
 void main() {
   runApp(const App());
@@ -19,9 +20,7 @@ class App extends StatelessWidget {
         ),
         cardColor: const Color(0xFFF4EDDB),
       ),
-      home: Scaffold(
-        body: Center(),
-      ),
+      home: HomeScreen(),
     );
   }
 }
