@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
   bool showRestart = false;
   int cycles = 3;
-  int rounds = 0;
 
   void onTick(Timer timer) {
     //1초 1Tick마다 실행할
@@ -34,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
       //라운드 1회 추가
       if ((4 / cycles) == 0) {
-        rounds = rounds + 1;
         cycles = 0; //사이클은 다시 0으로
       }
     });
