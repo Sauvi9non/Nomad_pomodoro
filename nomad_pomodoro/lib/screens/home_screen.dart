@@ -25,15 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
       if (totalSeconds == 0) {
         isRunning = false;
         timer.cancel();
-        cycles = cycles + 1;
+        cycles = cycles + 1; //사이클은 다시 0으로
         totalSeconds = timeSelect[0]; // 선택한 타이머 시간으로 다시
       } else {
         totalSeconds = totalSeconds - 1;
-      }
-
-      //라운드 1회 추가
-      if ((4 / cycles) == 0) {
-        cycles = 0; //사이클은 다시 0으로
       }
     });
   }
@@ -156,7 +151,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Text(
-                              "$cycles", //pomodoro를 끝낸 횟수
+                              cycles < 5
+                                  ? (cycles % 4).toString() //0,1,2,3
+                                  : (cycles / 4)
+                                      .truncate()
+                                      .toString(), //pomodoro를 끝낸 횟수
                               style: TextStyle(
                                 fontSize: 58,
                                 fontWeight: FontWeight.w600,
