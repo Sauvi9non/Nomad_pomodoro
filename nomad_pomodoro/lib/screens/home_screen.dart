@@ -15,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int totalSeconds = timeSelect[0];
   late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
   bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
+  bool showRestart = false;
   int totalPomodoros = 0;
 
   void onTick(Timer timer) {
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     timer = Timer.periodic(Duration(seconds: 1), onTick);
     setState(() {
       isRunning = true; //isPause 상태 반대로
+      showRestart = true;
     });
   }
 
@@ -45,6 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
     timer.cancel();
     setState(() {
       isRunning = false;
+    });
+  }
+
+  void onRestartPressed() {
+    setState(() {
+      totalSeconds = timeSelect[0];
+      isRunning = false;
+      timer.cancel();
     });
   }
 
@@ -85,13 +95,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             flex: 3,
             child: Center(
-              child: IconButton(
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: isRunning
-                    ? Icon(Icons.pause_circle_outline)
-                    : Icon(Icons.play_circle_outline),
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: isRunning
+                        ? Icon(Icons.pause_circle_outline)
+                        : Icon(Icons.play_circle_outline),
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                  ),
+                  showRestart
+                      ? IconButton(
+                          onPressed: onRestartPressed,
+                          icon: Icon(Icons.restart_alt_outlined),
+                          iconSize: 48,
+                          color: Theme.of(context).cardColor.withAlpha(150),
+                        )
+                      : SizedBox(),
+                ],
               ),
             ),
           ),
