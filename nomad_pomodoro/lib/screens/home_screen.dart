@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String format(int secs) {
+    var duration = Duration(seconds: secs);
+    // var trimmedDuration = duration.toString().split(".")[0].split(":");
+    // var hour = trimmedDuration[0];
+    // var minute = trimmedDuration[1];
+    // var second = trimmedDuration[2];
+    var MinuteSecond = duration.toString().split(".")[0].substring(2, 7);
+    // print(MinuteSecond);
+    return MinuteSecond;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                (totalSeconds != 0) ? "$totalSeconds" : "fin",
+                (totalSeconds != 0) ? format(totalSeconds) : "fin",
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
