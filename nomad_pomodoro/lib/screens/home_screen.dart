@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Timer timer; //사용자가 버튼 누를 때만 생성되도록 -> 나중에 초기화 된다 -> late로 이를 명시
   bool isRunning = false; //처음에는 시간이 안가니까 true, 최초 1회 누르고 나서야 false
   bool showRestart = false;
-  int totalPomodoros = 0;
+  int cycles = 0;
+  int rounds = 0;
 
   void onTick(Timer timer) {
     //1초 1Tick마다 실행할
@@ -24,8 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
       if (totalSeconds == 0) {
         isRunning = false;
         timer.cancel();
-        totalPomodoros = totalPomodoros + 1;
-        totalSeconds = timeSelect[0];
+        cycles = cycles + 1;
+
+        //라운드 1회 추가
+        if ((cycles / 4) == 0) {
+          rounds = rounds + 1;
+          cycles = 0; //사이클은 다시 0으로
+        }
+
+        totalSeconds = timeSelect[0]; // 선택한 타이머 시간으로 다시
       } else {
         totalSeconds = totalSeconds - 1;
       }
@@ -132,30 +141,62 @@ class _HomeScreenState extends State<HomeScreen> {
                           topLeft: Radius.circular(50),
                           topRight: Radius.circular(50)),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          "POMODORO",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context)
-                                .textTheme
-                                .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
-                                .color,
-                          ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "CYCLE",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
+                                    .color,
+                              ),
+                            ),
+                            Text(
+                              "$cycles", //pomodoro를 끝낸 횟수
+                              style: TextStyle(
+                                fontSize: 58,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
+                                    .color,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "$totalPomodoros", //pomodoro를 끝낸 횟수
-                          style: TextStyle(
-                            fontSize: 58,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context)
-                                .textTheme
-                                .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
-                                .color,
-                          ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "ROUND",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
+                                    .color,
+                              ),
+                            ),
+                            Text(
+                              "$cycles", //pomodoro를 끝낸 횟수
+                              style: TextStyle(
+                                fontSize: 58,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge! // !는 확실히 있다고 알려주는(?) ?는 있으면, 없거나 있으면
+                                    .color,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
